@@ -29,9 +29,7 @@ class _WeatherViewState extends State<WeatherView> {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(
-              child: PlacesListView(),
-            ),
+            const PlacesListView(),
           ],
         ),
       ),

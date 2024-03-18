@@ -22,26 +22,28 @@ class WeatherAppBar extends StatelessWidget {
         child: BlocBuilder<WeatherBloc, WeatherState>(
           builder: (context, state) {
             if (state is WeatherDataState) {
-              // final temperature = _getTemperatureForTheDay(
-              //   state.weather.daily,
-              //   0,
-              // );
-
-              return Column(
-                children: [
-                  Image.asset(
-                    WmoWeather.getWMOFromCode(
-                      state.weather.daily.weatherCode.first,
-                    ).getWeatherIconFromWMO(),
-                  ),
-                  Text(
-                    state.locationName,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  WeatherText(
-                    text: state.weather.daily.getAverageTemperature(0),
-                  ),
-                ],
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return SizedBox(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          WmoWeather.getWMOFromCode(
+                            state.weather.daily.weatherCode.first,
+                          ).getWeatherIconFromWMO(),
+                          height: constraints.maxHeight - 80,
+                        ),
+                        Text(
+                          state.locationName,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        WeatherText(
+                          text: state.weather.daily.getAverageTemperature(0),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             }
 

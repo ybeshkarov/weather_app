@@ -28,30 +28,36 @@ class _PlacesListState extends State<PlacesListView> {
         builder: (context, state) {
           switch (state) {
             case LocationNamesDataState():
-              return ListView.builder(
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => DetailedWeatherView(
-                        location: state.locations.values.toList()[index],
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: state.locations.length,
+                  (context, index) => InkWell(
+                    // Using a router is generally better.
+                    // However, for a two-screen app, it's acceptable.
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => DetailedWeatherView(
+                          location: state.locations.values.toList()[index],
+                          locationName: state.locations.keys.toList()[index],
+                        ),
+                      ),
+                    ),
+                    child: ListTile(
+                      title: LocationNameWidget(
                         locationName: state.locations.keys.toList()[index],
                       ),
                     ),
                   ),
-                  child: ListTile(
-                    title: LocationNameWidget(
-                      locationName: state.locations.keys.toList()[index],
-                    ),
-                  ),
                 ),
-                itemCount: state.locations.length,
-                shrinkWrap: true,
               );
+
             case GeocodingIdleState():
-              return const Text('Resolving location  ...');
+              return const SliverToBoxAdapter(
+                child: Text('Resolving location  ...'),
+              );
 
             default:
-              return const SizedBox.shrink();
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
           }
         },
       ),
